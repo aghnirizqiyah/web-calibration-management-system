@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalibrasi Thermokopel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      color: #000;
+      background: #fff;
+    }
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 15mm 15mm 10mm 15mm;
+      background: #fff;
+    }
+
+    /* ===== HEADER ===== */
+    .header-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #000;
+      margin-bottom: 6px;
+    }
+    .header-table td {
+      padding: 4px 8px;
+      vertical-align: middle;
+    }
+    .logo-cell {
+      width: 80px;
+      border-right: 1px solid #000;
+      text-align: center;
+    }
+    .logo-cell img {
+      width: 60px;
+    }
+    .logo-placeholder {
+      font-size: 9px;
+      color: #555;
+      font-style: italic;
+    }
+    .logo-img {
+      width: 70px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .title-cell {
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+      border-right: 1px solid #000;
+    }
+    .nodoc-cell {
+      width: 130px;
+      font-size: 8px;
+      text-align: center; 
+      padding: 0;
+    }
+
+    .nodoc-label {
+      font-weight: bold;
+      padding: 6px 4px;
+      border-bottom: 1px solid #000;
+    }
+
+    .nodoc-value {
+      padding: 6px 4px;
+    }
+
+    /* ===== SECTIONS ===== */
+    .section-title {
+      font-weight: bold;
+      font-size: 9px;
+      text-decoration: underline;
+      margin: 8px 0 4px 0;
+    }
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 4px;
+    }
+    .info-table td {
+      padding: 2px 4px;
+      vertical-align: top;
+      font-size: 9px;
+    }
+    .info-table .label {
+      width: 130px;
+      font-weight: bold;
+      color: #333;
+    }
+    .info-table .sub-label {
+      width: 130px;
+      color: #666;
+      font-style: italic;
+      font-size: 8px;
+    }
+    .info-table .colon { width: 10px; }
+    .info-table .value {
+      /* dynamic value from DB */
+    }
+
+    /* DB-sourced fields highlighted */
+    .db-field {
+      background: #fffde7;
+      border: 1px solid #f9a825;
+      border-radius: 3px;
+      padding: 1px 5px;
+      display: inline-block;
+      min-width: 160px;
+      font-size: 9px;
+    }
+
+    /* Placeholder style */
+    .placeholder {
+      color: #999;
+      font-style: italic;
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      border: none;
+      border-top: 1px solid #000;
+      margin: 8px 0;
+    }
+
+    /* ===== KETERANGAN UMUM ===== */
+    .keterangan-box {
+      font-size: 8.5px;
+      margin: 4px 0;
+    }
+
+    /* ===== CALIBRATION RESULT TABLE ===== */
+    .cal-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      font-size: 8px;
+    }
+    .cal-table th, .cal-table td {
+      border: 1px solid #000;
+      padding: 2px 4px;
+      text-align: center;
+    }
+    .cal-table th {
+      background: #e0e0e0;
+      font-weight: bold;
+    }
+    .cal-table .header-span {
+      background: #bdbdbd;
+    }
+    .cal-table td:nth-last-child(2) {
+      border-right: none;
+    }
+
+    /* ===== SUMMARY TABLE (Yellow) ===== */
+    .summary-table {
+      border-collapse: collapse;
+      margin: 10px auto;
+      font-size: 8.5px;
+    }
+    .summary-table th, .summary-table td {
+      border: 1px solid #000;
+      padding: 3px 8px;
+      text-align: center;
+    }
+    .summary-table th {
+      background: #fbc02d;
+      font-weight: bold;
+    }
+    .summary-table td {
+      background: #fff9c4;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer-note {
+      font-size: 8px;
+      margin: 6px 0;
+    }
+    .end-cert {
+      text-align: center;
+      font-size: 8.5px;
+      margin: 10px 0 50px 0;
+    }
+    .sign-table {
+      width: 100%;
+      margin-top: 30px;
+    }
+
+    .sign-table td {
+      width: 50%;
+      text-align: center;
+      vertical-align: top;
+    }
+
+    .sign-title {
+      font-size: 9px;
+      margin-bottom: 10px;
+    }
+
+    .ttd-img {
+      height: 70px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto -35px auto;
+    }
+
+    .sign-line {
+      width: 60%;
+      border-top: 1px solid #000;
+      margin: 40px auto 5px auto;
+    }
+
+    .sign-name {
+      font-weight: bold;
+      font-size: 9px;
+    }
+    .doc-footer {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      border: 1px solid #000;
+    }
+    .doc-footer td {
+      border: 1px solid #000;
+      padding: 3px 8px;
+      font-size: 8px;
+      text-align: center;
+    }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body { background: #fff; }
+      .page { margin: 0; padding: 10mm 12mm; }
+      .db-field { border: none; background: #fffde7; }
+    }
+    @page {
+      size: A4;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== HEADER ===== -->
+  <table class="header-table">
+    <tr>
+      <td class="logo-cell">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOWhh6yd_gyy3xPi40sd1XkRsmWPLIb3HZew&s" alt="GarudaFood Logo" class="logo-img">
+      </td>
+      <td class="title-cell">Kalibrasi Thermokopel</td>
+      <td class="nodoc-cell">
+        <div class="nodoc-label">NO DOKUMEN</div>
+        <div class="nodoc-value">FR-S1.7.6.00-01-08</div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- ===== IDENTITAS ALAT ===== -->
+  <div class="section-title"><br>IDENTITAS ALAT <span style="font-weight:normal;font-style:italic;font-size:8px">Instrument Identification</span></div>
+  <table class="info-table">
+    <tr>
+      <td class="label">Nama Alat<br><span class="sub-label">Instrument</span></td>
+      <td class="colon">:</td>
+      <td><span id="nama_alat">{{nama_alat}}</span></td>
+      <td class="label" style="padding-left:30px">Tipe<br><span class="sub-label">Model</span></td>
+      <td class="colon">:</td>
+      <td><span id="tipe"><span class="placeholder">-</span></span></td>
+    </tr>
+    <tr>
+      <td class="label">Merk/Pabrik<br><span class="sub-label">Manufacturer</span></td>
+      <td class="colon">:</td>
+      <td><span>{{mesin}}</span></td>
+      <td class="label" style="padding-left:30px">Nomor Seri<br><span class="sub-label">Serial Number</span></td>
+      <td class="colon">:</td>
+      <td><span id="serial_number"><span class="placeholder">-</span></span></td>
+    </tr>
+    <tr>
+      <td class="label">No. Identitas<br><span class="sub-label">ID Number</span></td>
+      <td class="colon">:</td>
+      <td colspan="4"><span id="identitas">{{identitas}}</span></td>
+    </tr>
+    <tr>
+      <td class="label">Range Penggunaan Alat<br><span class="sub-label">-</span></td>
+      <td class="colon">:</td>
+      <td colspan="4"><span id="range_pengukuran">{{range_pengukuran}}</span></td>
+    </tr>
+  </table>
+
+  <!-- ===== METODE TELUSURAN ===== -->
+  <div class="section-title"><br>METODE TELUSURAN <span style="font-weight:normal;font-style:italic;font-size:8px">Method(s) &amp; Traceability</span></div>
+  <table class="info-table">
+    <tr>
+      <td class="label">Metode Kalibrasi<br><span class="sub-label">Calibration Method(s)</span></td>
+      <td class="colon">:</td>
+      <td colspan="4"><span id="metode_kalibrasi">{{metode_kalibrasi}}</span></td>
+    </tr>
+    <tr>
+      <td class="label">Telusuran<br><span class="sub-label">Traceability</span></td>
+      <td class="colon">:</td>
+      <td colspan="4"></td>
+    </tr>
+  </table>
+
+  <!-- ===== KETERANGAN UMUM ===== -->
+  <div class="section-title"><br>KETERANGAN UMUM <span style="font-weight:normal;font-style:italic;font-size:8px">General Remark</span></div>
+  <div class="keterangan-box">
+    - Ketidakpastian koreksi dinyatakan pada tingkat kepercayaan 95% (U<sub>95</sub>) dengan faktor cakupan k = 2
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== CALIBRATION INFO ===== -->
+  <table class="info-table">
+    <tr>
+      <td class="label">Tanggal Kalibrasi<br><span class="sub-label">Calibration Date</span></td>
+      <td class="colon">:</td>
+      <td><span id="tanggal_realisasi">{{tanggal_realisasi}}</span></td>
+      <td class="label" style="padding-left:20px">Nomor Sertifikat<br><span class="sub-label">Certificate Number</span></td>
+      <td class="colon">:</td>
+      <td><span id="nomor_sertifikat">{{nomor_sertifikat}}</span></td>
+    </tr>
+    <tr>
+      <td class="label">Lokasi Kalibrasi<br><span class="sub-label">Calibration Location</span></td>
+      <td class="colon">:</td>
+      <td><span id="plant">{{plant}}</span></td>
+      <td class="label" style="padding-left:20px">Kondisi Lingkungan<br><span class="sub-label">Environment</span></td>
+      <td class="colon">:</td>
+      <td>
+        <span id="kondisi_lingkungan">(40 ± 1) °C</span><br>
+        <span id="kelembaban_lingkungan">(55 ± 5) %</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Alat Standar<br><span class="sub-label">Standard(s) Used</span></td>
+      <td class="colon">:</td>
+      <td colspan="4"><span id="alat_standar">{{alat_standar}}</span></td>
+    </tr>
+    <tr>
+      <td class="label">Range Pengukuran Alat<br><span class="sub-label">-</span></td>
+      <td class="colon">:</td>
+      <td colspan="4"><span id="range_pengukuran_alat">50 °C - 500 °C</span></td>
+    </tr>
+    <tr>
+      <td class="label">HASIL KALIBRASI<br><span class="sub-label">Result of Calibration</span></td>
+      <td class="colon">:</td>
+      <td colspan="4"><span id="hasil_kalibrasi">{{hasil_kalibrasi}}</span></td>
+    </tr>
+    <tr>
+      <td class="label">Kapasitas/Resolusi<br><span class="sub-label">Capacity/Resolution</span></td>
+      <td class="colon">:</td>
+      <td colspan="4"><span id="resolusi">0,1</span></td>
+    </tr>
+  </table>
+
+  <!-- ===== MEASUREMENT TABLE ===== -->
+  <table class="cal-table" style="margin-top:10px">
+    <thead>
+      <tr>
+        <th rowspan="3" style="width:90px">Penunjukan Suhu Standar</th>
+        <th colspan="5" class="header-span">Penunjukan Termometer (UUT)</th>
+        <th rowspan="3">X<br>(Rata-rata)</th>
+        <th rowspan="3">Correction</th>
+        <th rowspan="3">Stdev<br>(standar<br>deviasi)</th>
+        <th rowspan="3">Ur<br>(U<br>ulang)</th>
+        <th rowspan="3">Us (U Sertifikat)</th>
+        <th rowspan="3">Ures</th>
+        <th rowspan="3">u kargm</th>
+        <th rowspan="3">uc</th>
+        <th rowspan="3" colspan="2">U</th>
+      </tr>
+      <tr>
+        <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+      </tr>
+    </thead>
+
+    <tbody id="detail-rows">
+      {{#each hasil_kalibrasi_detail}}
+      <tr>
+        <td>{{this.suhu_standar}}</td>
+        <td>{{this.r1}}</td>   <!-- pengukuran ulang ke-1 untuk suhu ini -->
+        <td>{{this.r2}}</td>   <!-- pengukuran ulang ke-2 untuk suhu ini -->
+        <td>{{this.r3}}</td>   <!-- pengukuran ulang ke-3 untuk suhu ini -->
+        <td>{{this.r4}}</td>   <!-- pengukuran ulang ke-4 untuk suhu ini -->
+        <td>{{this.r5}}</td>   <!-- pengukuran ulang ke-5 untuk suhu ini -->
+        <td>{{this.x_rata}}</td>
+        <td>{{this.correction}}</td>
+        <td>{{this.stdev}}</td>
+        <td>{{this.ur}}</td>
+        <td>{{this.us}}</td>
+        <td>{{this.ures}}</td>
+        <td>{{this.u_kargm}}</td>
+        <td>{{this.uc}}</td>
+        <td>{{this.u_total}}</td>
+        <td>°C</td>
+      </tr>
+      {{/each}}
+
+      <!-- Baris nilai besar - nilai terkecil (dihitung dari semua data) -->
+      <tr>
+        <td colspan="12" style="text-align:right;font-size:8px;font-style:italic">
+          Nilai besar - nilai terkecil
+        </td>
+        <td id="nilai-besar-kecil">{{nilai_besar_kecil}}</td>
+        <td colspan="3"></td>
+      </tr>
+    
+    </tbody>
+  </table>
+
+  <div class="footer-note">
+    Ketidakpastian sertifikat alat ukur : {{ketidakpastian_alat_ukur}}
+  </div>
+
+  <!-- ===== SUMMARY TABLE (Yellow) ===== -->
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>Standard<br>Reading (°C)</th>
+        <th>Instrument<br>Reading (°C)</th>
+        <th>Correction<br>(°C)</th>
+        <th>Uncertainty<br>k=2 ± (°C)</th>
+      </tr>
+    </thead>
+    <tbody id="summary-rows">
+      <!-- Diisi dari hasil_kalibrasi_detail -->
+      <tr>
+        <td>{{suhu_standar}}</td>
+        <td>{{instrument_reading}}</td>
+        <td>{{correction}}</td>
+        <td>{{uncertainty}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ===== CATATAN ===== -->
+  <div style="margin-top:50px;font-size:9px">
+    <strong>Catatan :</strong>
+    <div style="min-height:20px;border-bottom:1px solid #ccc;margin-top:4px" id="catatan"></div>
+  </div>
+
+  <!-- ===== END OF CERTIFICATE ===== -->
+  <div class="end-cert">
+    ==== end of certificate / akhir dari sertifikat ====
+  </div>
+
+  <!-- ===== SIGNATURES ===== -->
+  <table class="sign-table">
+    <tr>
+      <td>
+        <div class="sign-title">Manager Teknik</div>
+
+        <img src="https://raw.githubusercontent.com/aghnirizqiyah/gambar/main/ttd1.jpeg" class="ttd-img">
+
+        <div class="sign-line"></div>
+        <div class="sign-name">Nanang Sulistyawan</div>
+      </td>
+
+      <td>
+        <div class="sign-title">Pelaksana Kalibrasi</div>
+
+        <img src="https://raw.githubusercontent.com/aghnirizqiyah/gambar/main/ttd2.jpeg" class="ttd-img">
+
+        <div class="sign-line"></div>
+        <div class="sign-name">Anas Fauzi</div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- ===== DOC FOOTER ===== -->
+  <table class="doc-footer">
+    <tr>
+      <td style="width:40%"><span id="tanggal-doc">1 Februrari 2020</span></td>
+      <td style="width:30%">No Rev : 0.1</td>
+      <td style="width:30%">Hal : 1/1</td>
+    </tr>
+  </table>
+
+</div>
+</body>
+</html>
