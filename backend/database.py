@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("postgresql://postgres:XjDrZLdIfplcbSqLzHONZcSIeBLxcIIx@postgres.railway.internal:5432/railway")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 
 def get_connection():
