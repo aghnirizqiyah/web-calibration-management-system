@@ -1,20 +1,17 @@
+import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DATABASE_URL = os.getenv("postgresql://postgres:XjDrZLdIfplcbSqLzHONZcSIeBLxcIIx@postgres.railway.internal:5432/railway")
+
 
 def get_connection():
-    return psycopg2.connect(
-        host="localhost",
-        database="Kalibrasi",
-        user="postgres",
-        password="nrghnrzqyh1712",
-        port="5432"
-    )
+    return psycopg2.connect(DATABASE_URL)
 
 
 def get_cursor():
-    """
-    Cursor yang langsung return hasil dalam bentuk dictionary
-    (lebih cocok untuk API karena langsung bisa jadi JSON)
-    """
     conn = get_connection()
     return conn, conn.cursor(cursor_factory=RealDictCursor)
